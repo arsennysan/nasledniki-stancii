@@ -1,0 +1,7 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');const elements={};const el=()=>({style:{},classList:{toggle(){}},textContent:'',innerHTML:''});const context={Genetics:require('./genetics.js'),document:{querySelector:s=>elements[s]??(elements[s]=el()),querySelectorAll:()=>[],addEventListener(){},activeElement:{tagName:'BODY'}},localStorage:{getItem:()=>null,setItem(){}},window:{},setTimeout:()=>0,clearTimeout(){},confirm:()=>true,console};vm.createContext(context);vm.runInContext(fs.readFileSync('./game.js','utf8'),context);vm.runInContext(`
+state.team=[1];rest();move(1,0);move(1,0);move(1,0);if(state.position[0]!==3)throw Error('Missing ability must block gate');
+state.team=[0,1];rest();for(let i=0;i<6;i++)move(1,0);if(!state.cleared.includes(0))throw Error('Sector 1');
+state.sector=1;rest();for(let i=0;i<6;i++)move(1,0);if(!state.cleared.includes(1))throw Error('Sector 2');
+const child=G.breed(person(0).genome,person(1).genome,()=>.5,0);state.people.push({...child,id:4,name:'Test',color:'#fff',generation:2,parents:[0,1]});state.team=[3,4];state.sector=2;rest();for(let i=0;i<6;i++)move(1,0);if(!state.won)throw Error('Final gate');
+const count=state.resources;move(-1,0);move(1,0);if(state.resources!==count)throw Error('Duplicate reward');
+`,context);console.log('Passed: blocked gate, all three sectors, inherited final ability, victory, no duplicate rewards.');

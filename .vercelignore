@@ -1,0 +1,7 @@
+.git
+.vercel
+node_modules
+*.cjs
+*.zip
+download
+GAME.md
